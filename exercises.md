@@ -3,7 +3,7 @@
 > **Bài làm cá nhân.** Trả lời bằng lời của chính bạn, dựa trên những gì bạn
 > quan sát được khi chạy code — không sao chép đáp án của người khác.
 >
-> Cách trả lời: thay dòng `> *Câu trả lời của bạn*` bằng câu trả lời.
+> Cách trả lời: thay từng dòng giữ chỗ bên dưới bằng câu trả lời của bạn.
 > `grade.py` đếm số câu đã trả lời (15 điểm cho 10 câu).
 >
 > Họ và tên: Cao Nhật Minh  Mã học viên: 2A202601721
@@ -116,4 +116,4 @@ Ghi lại **một** lỗi bạn gặp khi deploy lên cloud (build fail, health 
 timeout, sai REDIS_URL, app không đọc `$PORT`...): thông báo lỗi là gì, bạn
 tìm ra nguyên nhân bằng cách nào, và sửa ra sao?
 
-> *Câu trả lời của bạn*
+> Khi kiểm tra service, tôi nhận `HTTP 301 Moved Permanently` thay vì 200. Header `location` cho thấy Railway chuyển request từ HTTP sang HTTPS, nên tôi kiểm tra lại biến `$URL` và thấy đang dùng sai giao thức. Tôi đổi URL sang `https://k3-day12-2a202601721-caonhatminh-production.up.railway.app`; sau đó `/health` và `/ready` đều trả 200.
