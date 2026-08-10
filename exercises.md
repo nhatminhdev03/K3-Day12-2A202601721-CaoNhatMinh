@@ -6,7 +6,7 @@
 > Cách trả lời: thay dòng `> *Câu trả lời của bạn*` bằng câu trả lời.
 > `grade.py` đếm số câu đã trả lời (15 điểm cho 10 câu).
 >
-> Họ và tên: ..........................  Mã học viên: ..........................
+> Họ và tên: Cao Nhật Minh  Mã học viên: 2A202601721
 
 ---
 
@@ -16,7 +16,7 @@ Trong `Settings`, `agent_api_key` không có giá trị mặc định nên app c
 khi khởi động nếu thiếu biến môi trường. Hãy mô tả một tình huống cụ thể mà
 việc "chết sớm" này cứu bạn, so với việc để mặc định `"changeme"`.
 
-> *Câu trả lời của bạn*
+> Khi deploy mà quên cấu hình `AGENT_API_KEY`, app dừng ngay và báo lỗi để tôi bổ sung secret trước khi nhận traffic. Nếu có khóa mặc định `"changeme"`, app vẫn chạy bình thường, khiến người lạ dễ đoán khóa, gọi API trái phép và làm phát sinh chi phí.
 
 ---
 
@@ -26,7 +26,7 @@ Chạy service và gọi `/ask` vài lần. Dán một dòng log JSON bạn thu 
 nêu **hai** việc bạn làm được với dòng log đó mà `print("đã trả lời xong")`
 không làm được.
 
-> *Câu trả lời của bạn*
+> `{"event":"ask_completed","level":"info","timestamp":"2026-08-10T03:04:23+00:00","user_id":"sv01","cost_usd":0.0001}`. Từ các trường JSON, tôi có thể lọc request theo `user_id` và cộng `cost_usd` để theo dõi chi phí. Dòng `print("đã trả lời xong")` không chứa các trường riêng biệt nên hệ thống log khó tìm kiếm, thống kê hoặc cảnh báo tự động.
 
 ---
 
@@ -42,12 +42,12 @@ docker images | grep agent
 
 | Bản | Dung lượng |
 |-----|-----------|
-| 1 stage (bản đầu) | ... MB |
-| Multi-stage | ... MB |
+| 1 stage (bản đầu) | 1690 MB |
+| Multi-stage | 270 MB |
 
 Giải thích: phần dung lượng chênh lệch đó là những gì?
 
-> *Câu trả lời của bạn*
+> Bản multi-stage nhỏ hơn khoảng 1420 MB. Phần chênh lệch chủ yếu đến từ base image Python đầy đủ cùng các công cụ, cache và thành phần phục vụ build. Stage runtime chỉ dùng image `slim` và sao chép thư viện đã cài cùng source cần chạy.
 
 ---
 
@@ -57,7 +57,7 @@ Sửa một ký tự trong `app/main.py` rồi build lại. Với Dockerfile c�
 layer nào được dùng lại từ cache, layer nào phải chạy lại? Nếu bạn đặt
 `COPY . .` lên trước `RUN pip install` thì kết quả khác thế nào?
 
-> *Câu trả lời của bạn*
+> Vì `requirements.txt` không đổi, Docker dùng lại cache của layer copy requirements và cài dependency. Chỉ layer copy source cùng các layer phía sau phải tạo lại. Nếu đặt `COPY . .` trước `RUN pip install`, một thay đổi nhỏ trong code cũng làm cache bị mất và Docker phải tải, cài lại toàn bộ thư viện.
 
 ---
 
@@ -67,7 +67,7 @@ Container mặc định chạy bằng root. Mô tả chuỗi sự kiện dẫn t
 trong code Python của bạn" tới "kẻ tấn công có quyền cao trên máy host", và
 lệnh `USER` cắt đứt chuỗi đó ở chỗ nào.
 
-> *Câu trả lời của bạn*
+> Kẻ tấn công có thể lợi dụng lỗ hổng Python để thực thi lệnh trong container. Nếu process chạy bằng root, lệnh đó có quyền sửa file hệ thống hoặc lợi dụng volume/cấu hình sai để tác động đến host. `USER appuser` chuyển process sang UID thường, nên mã bị khai thác chỉ có quyền hạn chế và giảm mức độ thiệt hại.
 
 ---
 
